@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Transportation</title>
+
+    <link rel="stylesheet" href="Style.css" />
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+
+    <script src="js\main.js"></script>
+    <script src="js\data.js"></script>
+
+</head>
+
+<body>
+    <div class="flex-container">
+
+        <asite class="site-panel">
+
+            <div class="top-panel">
+                <div class="site-panel-top">
+                    <img src="icons\back.svg" alt="">
+                    <div>
+                        <span>Orders </span><span class="js-order-count"></span>
+                    </div>
+                </div>
+                <div class="order-find-panel">
+                    <form>
+                        <input type="search" class="order-find-field" placeholder="Поиск">
+                        <img src="icons\search.svg" alt="" onclick="findInOrderPanel()">
+                        <img src="icons\refresh.svg" alt="" onclick="loadOrders()">
+                    </form>
+                </div>
+            </div>
+
+            <div class="orders-panel">
+
+            </div>
+        </asite>
+
+        <div class="main-panel">
+            <div class="main-panel-top">
+                <img src="icons\open-menu.svg" alt="" class="burger-buttom">
+                <div class="main-panel-top-text">Order</div>
+            </div>
+
+            <div class="main-info-order">
+
+                <div class="order-price-panel">
+                    <div class="order-text">Order <span class="current-order-id"></span></div>
+                    <div class="price">
+                        <span class="price-text">0</span><br>
+                        <span class="currency-text">EUR</span>
+                    </div>
+                </div>
+
+                <div class="customer-date-panel">
+                    <span>Customer: </span><span class="info-customer"></span><br>
+                    <span>Ordered: </span><span class="info-createdAt"></span><br>
+                    <span>Shipped: </span><span class="info-shippedAt"></span>
+                </div>
+
+                <div class="icons">
+                    <div class="js-underline-icon" title="Shipping info">
+                        <i class="fa fa-truck js-select-icon" id="truck-icon" aria-hidden="true" onclick="iconClick(this,'man-icon')"></i>
+                    </div>
+                    <div title="Processor">
+                        <i class="fa fa-user-o" id="man-icon" aria-hidden="true" onclick="iconClick(this,'truck-icon')"></i>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="product-panel">
+
+                <div class="dynamic-container">
+
+                    <div class="address-panel-header">
+                        <div>
+                            <span>Shipping Address</span>
+                        </div>
+                    </div>
+
+                    <div class="address-info-list">
+                        <div>
+                            <div class="type-field">Name:</div>
+                            <div class="name-parcel"></div><br>
+                        </div>
+                        <div>
+                            <div class="type-field">Street:</div>
+                            <div class="street-text"></div><br>
+                        </div>
+                        <div>
+                            <div class="type-field">ZIP Code / City:</div>
+                            <div class="zipcode-text"></div><br>
+                        </div>
+                        <div>
+                            <div class="type-field">Region:</div>
+                            <div class="region-text"></div><br>
+                        </div>
+                        <div>
+                            <div class="type-field">Country:</div>
+                            <div class="country-text"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="line-items">
+                    <div class="line-items-top-text">
+                        Line Items <span class="js-product-count"></span>
+                    </div>
+                    <div class="product-find-panel">
+                        <form>
+                            <input type="search" class="product-find-field" placeholder="Поиск">
+                            <img src="icons\search.svg" alt="">
+                            <img src="icons\refresh.svg" alt="">
+                        </form>
+                    </div>
+                    <div class="box-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product <img src="icons\sort.png " alt=" " onclick="getSort(event) "></th>
+                                    <th>Unit Price <img src="icons\sort.png " alt=" " onclick="getSort(event) "></th>
+                                    <th>Quantify <img src="icons\sort.png " alt=" " onclick="getSort(event) "></th>
+                                    <th>Total <img src="icons\sort.png " alt=" " onclick="getSort(event) "></th>
+                                </tr>
+                            </thead>
+                            <tbody class="products-info ">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="website-footer ">
+            <div class="footer-left-inscription ">
+                <i class="fa fa-key " aria-hidden="true "></i>
+                <i class="fa fa-list " aria-hidden="true "></i>
+            </div>
+            <div class="footer-right-inscription ">
+                <i class="fa fa-envelope-o " aria-hidden="true "></i>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>
