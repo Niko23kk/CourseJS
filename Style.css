@@ -62,7 +62,6 @@ site panel stile
 
 .order-find-panel form,
 .product-find-panel form {
-    height: px;
     margin: 5px;
     vertical-align: middle;
     border: 1px solid #cccccc;
@@ -162,7 +161,7 @@ main panel
     flex: 9.5;
 }
 
-.burger-buttom {
+.burger-button {
     display: none;
 }
 
@@ -280,9 +279,13 @@ main panel
     padding-right: 7px!important;
 }
 
-.main-panel>.product-panel {
-    background-color: white;
+.product-panel {
+    background-color: #f7f7f7;
     flex: 26.5;
+}
+
+.dynamic-container {
+    background-color: white;
 }
 
 .address-panel-header,
@@ -306,33 +309,15 @@ main panel
     border-bottom: 2px solid #cedce9;
 }
 
-.processor-info-list {
-    padding-top: 15px;
-    display: flex;
-}
-
-.processor-info-list>div {
-    margin-left: 35px;
-}
-
-.processor-info-list>div:first-child,
-.processor-info-list>div:last-child {
-    flex: 1;
-}
-
-.details-text {
-    color: #72777b;
-    font-size: 18px;
-}
-
 .name-parcel,
 .street-text,
 .zipcode-text,
 .region-text,
 .country-text,
-.name-man,
-.employee-id,
-.job-title,
+.first-name-man,
+.last-name-man,
+.address,
+.email,
 .phone {
     flex: 2.5;
     padding-left: 15px;
@@ -340,32 +325,26 @@ main panel
     color: black;
 }
 
+.phone,
+.email {
+    color: #497fab;
+}
+
 .address-info-list>div,
-.processor-info-list>div>div {
+.processor-info-list>div {
     display: flex;
     direction: row;
-    line-height: 1.3;
+    line-height: 1.5;
 }
 
+.address-info-list .type-field,
 .processor-info-list .type-field {
-    flex: 2;
-    text-align: right;
-}
-
-.photo-man>img {
-    margin-top: 10px;
-    height: 120px;
-    width: 120px;
-}
-
-.address-info-list .type-field {
     flex: 1;
     text-align: right;
 }
 
 .line-items {
     padding-bottom: 15px;
-    background-color: #f7f7f7;
 }
 
 .line-items-top-text {
@@ -445,10 +424,6 @@ main panel
 .products-info>tr {
     background-color: white;
     border-bottom: 1px solid #cccccc;
-}
-
-.products-info>tr:hover {
-    background-color: #eeeeee;
 }
 
 .procuct>.product-name,
@@ -565,8 +540,14 @@ adaptive
     tr {
         display: block;
     }
+    table {
+        background-color: white;
+    }
     .box-table {
         margin: auto;
+    }
+    .box-table img {
+        display: none;
     }
     .box-table thead th:nth-child(1) {
         margin: 0;
@@ -582,15 +563,12 @@ adaptive
         margin-bottom: 0px;
     }
     .products-info>tr {
+        width: 200%;
         display: block;
     }
+    .mobile-quantify-text,
+    .mobile-total-text,
     .mobile-price-text {
-        display: block;
-    }
-    .mobile-quantify-text {
-        display: block;
-    }
-    .mobile-total-text {
         display: block;
     }
     .box-table tr>th:nth-child(1),
@@ -601,6 +579,7 @@ adaptive
     .box-table tr>td:nth-child(3),
     .box-table tr>th:nth-child(4),
     .box-table tr>td:nth-child(4) {
+        width: 100%;
         padding: 0;
         margin-left: 25px;
         text-align: left;
@@ -613,12 +592,24 @@ adaptive
         padding-left: 15px;
         padding-bottom: 10px;
     }
-    .address-info-list>div {
+    .address-info-list>div,
+    .processor-info-list>div {
         flex-direction: column;
     }
-    .address-info-list .type-field {
+    .address-info-list .type-field,
+    .processor-info-list .type-field {
         padding-left: 15px;
         text-align: left;
+    }
+    .address-panel-header,
+    .processor-panel-header {
+        padding: 0;
+    }
+    .product-find-panel {
+        margin-left: 10px;
+    }
+    .product-find-panel>form {
+        margin: 0;
     }
     .moreinfo-top-text {
         margin-top: -10px;
@@ -626,7 +617,10 @@ adaptive
     }
     .line-items-top-text {
         margin: 0;
-        padding: 10px 0 10px 15px;
+        padding: 10px 0 0px 15px;
+    }
+    .line-items {
+        padding-bottom: 0;
     }
 }
 
@@ -637,7 +631,8 @@ adaptive
     .footer-left-inscription {
         display: none;
     }
-    .burger-buttom {
+    .burger-button {
+        z-index: 10;
         cursor: pointer;
         padding-left: 10px;
         padding-top: 3px;
@@ -648,4 +643,12 @@ adaptive
     .main-panel-top-text {
         margin-left: -25px;
     }
+}
+
+.show-site-panel {
+    display: block;
+}
+
+.hide-site-panel {
+    display: none;
 }

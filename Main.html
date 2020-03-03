@@ -13,14 +13,14 @@
 
 </head>
 
-<body>
+<body onload="loadOrders()">
     <div class="flex-container">
 
         <asite class="site-panel">
 
             <div class="top-panel">
                 <div class="site-panel-top">
-                    <img src="icons\back.svg" alt="">
+                    <img src="icons\back.svg" alt="" onclick="hideSitePanel()">
                     <div>
                         <span>Orders </span><span class="js-order-count"></span>
                     </div>
@@ -41,7 +41,7 @@
 
         <div class="main-panel">
             <div class="main-panel-top">
-                <img src="icons\open-menu.svg" alt="" class="burger-buttom">
+                <img src="icons\open-menu.svg" alt="" class="burger-button" onclick="showSitePanel(this)">
                 <div class="main-panel-top-text">Order</div>
             </div>
 
@@ -108,23 +108,23 @@
 
                 <div class="line-items">
                     <div class="line-items-top-text">
-                        Line Items <span class="js-product-count"></span>
+                        Line Items <span class="js-products-count"></span>
                     </div>
                     <div class="product-find-panel">
                         <form>
                             <input type="search" class="product-find-field" placeholder="Поиск">
-                            <img src="icons\search.svg" alt="">
-                            <img src="icons\refresh.svg" alt="">
+                            <img src="icons\search.svg" alt="" onclick="findInProductPanel()">
+                            <img src="icons\refresh.svg" alt="" onclick="selectProductInfo(findOrderById(document.querySelector('.current-order-id').innerHTML))">
                         </form>
                     </div>
                     <div class="box-table">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Product <img src="icons\sort.png " alt=" " onclick="getSort(event) "></th>
-                                    <th>Unit Price <img src="icons\sort.png " alt=" " onclick="getSort(event) "></th>
-                                    <th>Quantify <img src="icons\sort.png " alt=" " onclick="getSort(event) "></th>
-                                    <th>Total <img src="icons\sort.png " alt=" " onclick="getSort(event) "></th>
+                                    <th>Product <img src="icons\sort.png " alt=" " class="button-sort" onclick="getSort(event)"></th>
+                                    <th>Unit Price <img src="icons\sort.png " alt=" " class="button-sort" onclick="getSort(event)"></th>
+                                    <th>Quantify <img src="icons\sort.png " alt=" " class="button-sort" onclick="getSort(event)"></th>
+                                    <th>Total <img src="icons\sort.png " alt=" " class="button-sort" onclick="getSort(event)"></th>
                                 </tr>
                             </thead>
                             <tbody class="products-info ">
