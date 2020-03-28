@@ -1,0 +1,7 @@
+input[type="button"] {
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    background: #FFCCCC;
+    border: 1px solid black;
+}

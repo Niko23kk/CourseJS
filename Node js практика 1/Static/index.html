@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="js.js"></script>
+    <link rel="stylesheet" href="index.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <form id="form">
+        <input id="x" type="text" placeholder="x" value="" />
+        <input id="y" type="text" placeholder="y" value="" /></br>
+        <input type="button" onclick="sum(getElementById('x').value,getElementById('y').value)" value="SUM" /></br>
+        <input type="button" onclick="sub(getElementById('x').value,getElementById('y').value)" value="SUB" /></br>
+        <input type="button" onclick="conc(getElementById('x').value,getElementById('y').value)" value="CONC" /></br>
+        <input type="button" onclick="cansel()" value="CANCEL" /></br>
+    </form>
+    <span id="result"></span>
+</body>
+
+</html>

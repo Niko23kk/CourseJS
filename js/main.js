@@ -1,94 +1,100 @@
-var saveInformation = "";
+var saveShippingAndProcessorInformation = "";
 var countForDefaultSort = 0;
-var saveDefaultProduct = "";
+var saveDefaultSortProduct = "";
+var saveSortField = "";
 
 
-function iconClick(element, str) { /*second param is unselect icon */
-    element.parentNode.classList.add("js-underline-icon")
-    element.classList.add("js-select-icon");
-
-    document.querySelector(`#${str}`).classList.remove("js-select-icon");
-    document.querySelector(`#${str}`).parentNode.classList.remove("js-underline-icon");
-
+function iconClick(icon, unselecticon) { /*second param is unselect icon */
     try {
-        if (element.id === "truck-icon")
+        if (icon.id === "truck-icon" && !icon.classList.contains("select-icon"))
             viewOtherInformation(document.querySelector(".dynamic-container"), 0);
-        else if (element.id === "man-icon")
+        else if (icon.id === "man-icon" && !icon.classList.contains("select-icon"))
             viewOtherInformation(document.querySelector(".dynamic-container"), 1);
     } catch {
         console.error("Info no load");
     }
+
+    icon.parentNode.classList.add("underline-icon")
+    icon.classList.add("select-icon");
+
+    document.querySelector(`#${unselecticon}`).classList.remove("select-icon");
+    document.querySelector(`#${unselecticon}`).parentNode.classList.remove("underline-icon");
+
 }
 
 
-function selectOrder(element) {
-    saveInformation = "";
-    let parent = element.parentNode;
+function selectOrder(divOrder) {
+    saveShippingAndProcessorInformation = "";
+    let parent = divOrder.parentNode;
     let child = parent.childNodes;
 
-    child.forEach(elem => {
-        if (elem.tagName == "DIV") {
-            if (elem.classList.contains("js-select-order"))
-                elem.classList.remove("js-select-order");
+    child.forEach(order => {
+        if (order.tagName == "DIV") {
+            if (order.classList.contains("select-order"))
+                order.classList.remove("select-order");
         }
     });
 
-    element.classList.add("js-select-order");
+    document.querySelector(".product-find-field").value = ""; //zeroing fields
+    document.querySelectorAll(".button-sort").forEach(divOrder => {
+        divOrder.outerHTML = `<img src="icons/sort.png " alt=" " class="button-sort" onclick="getSort(event)">`;
+    });
 
+    divOrder.classList.add("select-order");
     iconClick(document.querySelector("#truck-icon"), "man-icon");
-    selectInformation(findOrderById(element.querySelector(".order-id").innerHTML));
+    selectInformation(findOrderById(divOrder.querySelector(".order-id").innerHTML));
 }
 
 
-function findOrderById(element) {
+function findOrderById(carentId) {
     let order;
-    Orders.forEach(x => {
-        if (element === x.id)
-            order = x;
+    Orders.forEach(carentOrder => {
+        if (carentId === carentOrder.id)
+            order = carentOrder;
     });
     return order;
 }
 
 
-function selectInformation(element) {
-    document.querySelector(".current-order-id").innerHTML = `${element.id}`;
-    document.querySelector(".info-customer").innerHTML = `${element.OrderInfo.customer}`;
-    document.querySelector(".info-createdAt").innerHTML = `${element.OrderInfo.createdAt}`;
-    document.querySelector(".info-shippedAt").innerHTML = `${element.OrderInfo.shippedAt}`;
+function selectInformation(order) {
+    document.querySelector(".current-order-id").innerHTML = `${order.id}`;
+    document.querySelector(".info-customer").innerHTML = `${order.OrderInfo.customer}`;
+    document.querySelector(".info-createdAt").innerHTML = `${order.OrderInfo.createdAt}`;
+    document.querySelector(".info-shippedAt").innerHTML = `${order.OrderInfo.shippedAt}`;
     let totalPrice = 0;
-    element.products.forEach(x => {
-        totalPrice += Number(x.totalPrice);
+    order.products.forEach(carentProduct => {
+        totalPrice += Number(carentProduct.totalPrice);
     });
     document.querySelector(".price-text").innerHTML = `${totalPrice}`;
 
-    selectShipToInfo(element);
-    selectProductInfo(element);
+    selectShipToInfo(order);
+    selectProductInfo(order, 1);
 }
 
 
-function selectShipToInfo(element) {
-    document.querySelector(".name-parcel").innerHTML = `${element.ShipTo.name}`;
-    document.querySelector(".street-text").innerHTML = `${element.ShipTo.Address}`;
-    document.querySelector(".zipcode-text").innerHTML = `${element.ShipTo.ZIP}`;
-    document.querySelector(".region-text").innerHTML = `${element.ShipTo.Region}`;
-    document.querySelector(".country-text").innerHTML = `${element.ShipTo.Country}`;
+function selectShipToInfo(order) {
+    document.querySelector(".name-parcel").innerHTML = `${order.ShipTo.name}`;
+    document.querySelector(".street-text").innerHTML = `${order.ShipTo.Address}`;
+    document.querySelector(".zipcode-text").innerHTML = `${order.ShipTo.ZIP}`;
+    document.querySelector(".region-text").innerHTML = `${order.ShipTo.Region}`;
+    document.querySelector(".country-text").innerHTML = `${order.ShipTo.Country}`;
 }
 
 
-function selectCustomerInfo(element) {
-    document.querySelector(".first-name-man").innerHTML = `${element.CustomerInfo.firstName}`;
-    document.querySelector(".last-name-man").innerHTML = `${element.CustomerInfo.lastName}`;
-    document.querySelector(".address").innerHTML = `${element.CustomerInfo.address}`;
-    document.querySelector(".phone").innerHTML = `${element.CustomerInfo.phone}`;
-    document.querySelector(".email").innerHTML = `${element.CustomerInfo.email}`;
+function selectCustomerInfo(order) {
+    document.querySelector(".first-name-man").innerHTML = `${order.CustomerInfo.firstName}`;
+    document.querySelector(".last-name-man").innerHTML = `${order.CustomerInfo.lastName}`;
+    document.querySelector(".address").innerHTML = `${order.CustomerInfo.address}`;
+    document.querySelector(".phone").innerHTML = `${order.CustomerInfo.phone}`;
+    document.querySelector(".email").innerHTML = `${order.CustomerInfo.email}`;
 }
 
 
-function selectProductInfo(element) {
+function selectProductInfo(order, save) {
     try {
         let productsPanel = document.querySelector(".products-info");
         productsPanel.innerHTML = "";
-        element.products.forEach(product => {
+        order.products.forEach(product => {
             productsPanel.innerHTML += `<tr>
     <td class="procuct">
         <span class="product-name">${product.name}</span><br>
@@ -109,8 +115,9 @@ function selectProductInfo(element) {
     </td>
     </tr>`
         });
-
-        saveDefaultProduct = productsPanel.outerHTML;
+        if (save === 1) {
+            saveDefaultSortProduct = productsPanel.outerHTML;
+        }
         document.querySelector(".js-products-count").innerHTML = `(${productsPanel.childNodes.length})`;
     } catch {
         console.error("Info no load");
@@ -119,51 +126,86 @@ function selectProductInfo(element) {
 
 
 function loadOrders() {
+
     let ordersPanel = document.querySelector(".orders-panel");
     ordersPanel.innerHTML = "";
-    Orders.forEach(element => {
+
+    try {
+        if (Orders.length === 0) {
+            document.querySelector(".js-order-count").innerHTML = "";
+            ordersPanel.innerHTML = `<div class="no-order-error">Нет доступных заказов</div>`;
+            return;
+        }
+    } catch {
+
+        document.querySelector(".js-order-count").innerHTML = "";
+        ordersPanel.innerHTML = `<div class="no-order-error">Нет доступных заказов</div>`;
+        return;
+    }
+
+    Orders.forEach(order => {
         ordersPanel.innerHTML += `<div class="order" onclick="selectOrder(this)">
-        <span class="order-number">Ordered <span class="order-id">${element.id}</span></span>
-        <span class="date">${element.OrderInfo.createdAt}</span>
-        <span class="download-name">${element.OrderInfo.customer}</span>
-        <span class="status">${element.OrderInfo.status}</span>
-        <span class="shipped">Shipped: <span class="shipped-date">${element.OrderInfo.shippedAt}</span></span>
+        <span class="order-number">Ordered <span class="order-id">${order.id}</span></span>
+        <span class="date">${order.OrderInfo.createdAt}</span>
+        <span class="download-name">${order.OrderInfo.customer}</span>
+        <span class="status">${order.OrderInfo.status}</span>
+        <span class="shipped">Shipped: <span class="shipped-date">${order.OrderInfo.shippedAt}</span></span>
     </div>`
     });
     document.querySelector(".js-order-count").innerHTML = `(${ordersPanel.childNodes.length})`
+
 
     selectOrder(ordersPanel.firstChild);
 };
 
 
 let getSort = ({ target }) => {
+    const indexOfColumn = [...target.parentNode.parentNode.cells].indexOf(target.parentNode); //index of column in table
+
+    if (saveSortField.length === 0) {
+        saveSortField = indexOfColumn;
+    }
+
+    if (saveSortField === indexOfColumn) {
+        countForDefaultSort++;
+    } else {
+        saveSortField = indexOfColumn;
+        countForDefaultSort = 1;
+    }
+
+    let saveTarget = target;
     target = target.parentNode;
     try {
-        countForDefaultSort++;
         if (countForDefaultSort < 3) {
             if (countForDefaultSort === 1) {
+                for (let index = 1; index <= target.parentNode.childNodes.length - 1; index += 2) {
+                    if (target.parentNode.childNodes[index] === target) {
+                        sortTable(index, findOrderById(document.querySelector(".current-order-id").innerHTML), 1);
+                        break;
+                    }
+                }
                 document.querySelectorAll(".button-sort").forEach(element => {
-                    element.outerHTML = `<img src="icons/down.png " alt=" " class="button-sort" onclick="getSort(event)">`;
+                    if (element != saveTarget) {
+                        element.outerHTML = `<img src="icons/sort.png " alt=" " class="button-sort" onclick="getSort(event)">`;
+                    }
                 });
+                saveTarget.outerHTML = `<img src="icons/down.png" alt="" class="button-sort" onclick="getSort(event)">`
             } else if (countForDefaultSort === 2) {
+                for (let index = 1; index <= target.parentNode.childNodes.length - 1; index += 2) {
+                    if (target.parentNode.childNodes[index] === target) {
+                        sortTable(index, findOrderById(document.querySelector(".current-order-id").innerHTML), 0);
+                        break;
+                    }
+                }
                 document.querySelectorAll(".button-sort").forEach(element => {
-                    element.outerHTML = `<img src="icons/up.png " alt=" " class="button-sort" onclick="getSort(event)">`;
+                    if (element != saveTarget) {
+                        element.outerHTML = `<img src="icons/sort.png " alt=" " class="button-sort" onclick="getSort(event)">`;
+                    }
                 });
+                saveTarget.outerHTML = `<img src="icons/up.png " alt=" " class="button-sort" onclick="getSort(event)">`;
             }
-            const order = (target.dataset.order = (-target.dataset.order || 1)); //ascending or descending
-            const index = [...target.parentNode.cells].indexOf(target); //index of column in table
-            const collator = new Intl.Collator(['en'], { numeric: true });
-
-            const comparator = (index, order) => (a, b) => order * collator.compare(
-                a.children[index].innerHTML,
-                b.children[index].innerHTML
-            );
-
-            for (const tBody of target.closest('table').tBodies) //sort throught element of table
-                tBody.append(...[...tBody.rows].sort(comparator(index, order)));
-
         } else {
-            document.querySelector(".products-info").outerHTML = saveDefaultProduct;
+            document.querySelector(".products-info").outerHTML = saveDefaultSortProduct;
             countForDefaultSort = 0;
             document.querySelectorAll(".button-sort").forEach(element => {
                 element.outerHTML = `<img src="icons/sort.png " alt=" " class="button-sort" onclick="getSort(event)">`;
@@ -175,16 +217,61 @@ let getSort = ({ target }) => {
     }
 };
 
+function sortTable(indexOfColumn, order, asc) {
+    let sortField;
+    if (indexOfColumn === 1) {
+        sortField = "name";
+    }
+    if (indexOfColumn === 3) {
+        sortField = "price";
+    }
+    if (indexOfColumn === 5) {
+        sortField = "quantity";
+    }
+    if (indexOfColumn === 7) {
+        sortField = "totalPrice";
+    }
 
-function viewOtherInformation(element, bool) {
+    let resultSort = JSON.parse(JSON.stringify(order));
+
+    resultSort.products.sort(function(a, b) {
+        let c = a[`${sortField}`];
+        let d = b[`${sortField}`];
+
+        if (!isNaN(c - 0)) {
+            c -= 0;
+            d -= 0;
+        }
+        if (asc === 1) {
+            if (c < d) {
+                return -1;
+            } else if (c > d) {
+                return 1;
+            }
+            return 0;
+        } else {
+            if (c > d) {
+                return -1;
+            } else if (c < d) {
+                return 1;
+            }
+            return 0;
+        }
+    });
+    selectProductInfo(resultSort, 0);
+
+
+}
+
+
+function viewOtherInformation(infoPanel, bool) {
     if (bool === 1) {
-        if (saveInformation.length > 0) {
-            [saveInformation, element.innerHTML] = [element.innerHTML, saveInformation];
+        if (saveShippingAndProcessorInformation.length > 0) {
+            [saveShippingAndProcessorInformation, infoPanel.innerHTML] = [infoPanel.innerHTML, saveShippingAndProcessorInformation];
         } else {
             let order = findOrderById(document.querySelector(".current-order-id").innerHTML);
-            saveInformation = element.innerHTML;
-            element.innerHTML = `
-                <div class="processor-panel-header">
+            saveShippingAndProcessorInformation = infoPanel.innerHTML;
+            infoPanel.innerHTML = `<div class="processor-panel-header">
                     <div>
                         <span>Processor Information</span>
                     </div>
@@ -220,11 +307,10 @@ function viewOtherInformation(element, bool) {
         }
 
     } else {
-        if (saveInformation.length > 0) {
-            [saveInformation, element.innerHTML] = [element.innerHTML, saveInformation];
+        if (saveShippingAndProcessorInformation.length > 0) {
+            [saveShippingAndProcessorInformation, infoPanel.innerHTML] = [infoPanel.innerHTML, saveShippingAndProcessorInformation];
         } else {
-            element.innerHTML = `
-                <div class="address-panel-header">
+            infoPanel.innerHTML = `<div class="address-panel-header">
                     <div>
                         <span>Shipping Address</span>
                     </div>
@@ -261,7 +347,9 @@ function findInOrderPanel() {
     ordersPanel.innerHTML = "";
     let findField = document.querySelector(".order-find-field").value;
 
-    if (findField.length < 1) {
+    if (findField.length == 0) {
+        document.querySelector(".js-order-count").innerHTML = "";
+        ordersPanel.innerHTML = `<div class="no-order-error">Нет доступных заказов</div>`
         return;
     }
 
@@ -320,7 +408,7 @@ function findInProductPanel() {
             }
         });
 
-        saveDefaultProduct = productsPanel.outerHTML;
+        saveDefaultSortProduct = productsPanel.outerHTML;
         document.querySelector(".js-products-count").innerHTML = `(${productsPanel.childNodes.length})`;
     } catch {
         console.error("Info no load");
@@ -337,7 +425,6 @@ function showSitePanel(button) {
 
 
 function hideSitePanel() {
-    console.log(window.innerWidth);
     if (window.innerWidth < 800) {
         document.querySelector(".burger-button").classList.remove("hide-site-panel");
         document.querySelector(".main-panel-top-text").style.marginLeft = "-25px";

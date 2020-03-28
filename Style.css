@@ -93,7 +93,7 @@ site panel stile
     border-bottom: 1px solid #cccccc;
 }
 
-.js-select-order {
+.select-order {
     background-color: #deecf7 !important;
 }
 
@@ -266,12 +266,12 @@ main panel
     width: 35px;
 }
 
-.js-select-icon {
+.select-icon {
     background-color: #497fab;
     color: white !important;
 }
 
-.js-underline-icon {
+.underline-icon {
     border-bottom: 2px solid #497fab;
 }
 
@@ -618,9 +618,6 @@ adaptive
     .line-items-top-text {
         margin: 0;
         padding: 10px 0 0px 15px;
-    }
-    .line-items {
-        padding-bottom: 0;
     }
 }
 
