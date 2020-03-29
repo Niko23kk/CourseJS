@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button onclick="closeWS()">Disconnect</button></br>
+    <button onclick="sendWS()">Send</button>
+
+
+    <div id="out"></div>
+
+    <script>
+        let socket;
+        let timer;
+        let count = 0;
+
+        socket = new WebSocket("ws:/localhost:4000/");
+
+        socket.onmessage = data => { //in html output message only about count
+            let reg = new RegExp("^out");
+            if (reg.test(data.data)) {
+                document.querySelector("#out").textContent = data.data;
+            }
+        }
+
+        function sendWS() {
+            socket.send("aaa");
+        }
+
+        function closeWS() {
+            clearInterval(timer);
+            socket.close();
+        }
+    </script>
+</body>
+
+</html>

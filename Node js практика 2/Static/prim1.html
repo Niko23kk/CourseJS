@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button onclick="startWS()">Connect</button>
+    <button onclick="closeWS()">Disconnect</button>
+
+    <div id="out"></div>
+
+    <script>
+        let k = 0;
+        let socket;
+        let timer;
+
+        function startWS() {
+            socket = new WebSocket("ws:/localhost:4000/");
+
+            socket.onopen = () => {
+                timer = setInterval(() => {
+                    socket.send(++k + "\r\n");
+                }, 2000);
+            }
+            socket.onclose = e => {
+                clearInterval(timer);
+                console.log("socket close", e)
+            };
+            socket.onmessage = m => {
+                let out = document.querySelector("#out");
+                out.textContent += m.data + "\r\n";
+            }
+        }
+
+        function closeWS() {
+            setInterval(timer);
+            socket.close();
+        }
+    </script>
+</body>
+
+</html>
