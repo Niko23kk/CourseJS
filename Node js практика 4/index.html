@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Database</title>
+</head>
+
+<body>
+
+    <button onclick="pulpits()">Pulpits</button>
+    <button onclick="faculties()">Faculties</button>
+    <button onclick="subjects()">Subjects</button>
+    <button onclick="auditoriums()">Auditoriums</button>
+    <button onclick="auditoriumstypes()">Auditoriums types</button>
+
+    <div id="out"></div>
+    <div id="errors" style="color: red; font-size: 20px;"></div>
+
+</body>
+
+<script>
+    let table;
+    let putpost;
+    const url = "http://localhost:3000/api/";
+
+    function pulpits() {
+        table = "pulpits";
+        fetch(url + "pulpits", {
+            method: "GET"
+        }).then(res => res.json()).then(res => {
+            let container = document.getElementById("out");
+            container.innerHTML = `
+            </br>
+            <input class="data" id="id" type="json" placeholder="Id">
+            <input class="data" id="name" type="json" placeholder="Name">
+            <input class="data" id="faculty" type="json" placeholder="Faculty Id"></br>
+            <button onclick="post()">post</button>
+            <button onclick="put()">put</button>
+            </br></br></br>`;
+            res.forEach(pulpit => {
+                container.innerHTML += `<span>${pulpit.PULPIT} - ${pulpit.PULPIT_NAME} [${pulpit.FACULTY}] </span>`;
+                container.innerHTML += `<button onclick="del(this)" id="${pulpit.PULPIT}">delete</button><br>`
+            });
+        });
+    }
+
+    function faculties() {
+        table = "faculties";
+        fetch(url + "faculties").then(res => res.json()).then(res => {
+            let container = document.getElementById("out");
+            container.innerHTML = `
+            </br>
+            <input class="data" id="id" type="text" placeholder="Id">
+            <input class="data" id="name" type="text" placeholder="Name"></br>
+            <button class="data" onclick="post()">post</button>
+            <button onclick="put()">put</button>
+            </br></br></br>`;
+            res.forEach(faculty => {
+                container.innerHTML += `<span>${faculty.FACULTY} - ${faculty.FACULTY_NAME}</span>`;
+                container.innerHTML += `<button onclick="del(this)" id="${faculty.FACULTY}">delete</button><br>`;
+            });
+        });
+    }
+
+    function subjects() {
+        table = "subjects";
+        fetch(url + "subjects").then(res => res.json()).then(res => {
+            let container = document.getElementById("out");
+            container.innerHTML = `
+            </br>
+            <input class="data" id="id" type="text" placeholder="Id">
+            <input class="data" id="name" type="text" placeholder="Name">
+            <input class="data" id="pulpit" type="text" placeholder="Pulpit Id"></br>
+            <button onclick="post()">post</button>
+            <button onclick="put()">put</button>
+            </br></br></br>`;
+            res.forEach(subject => {
+                container.innerHTML += `<span>${subject.SUBJECT} - ${subject.SUBJECT_NAME} [${subject.PULPIT}]</span>`;
+                container.innerHTML += `<button onclick="del(this)" id="${subject.SUBJECT}">delete</button><br>`;
+            });
+        });
+    }
+
+    function auditoriums() {
+        table = "auditoriums";
+        fetch(url + "auditoriums").then(res => res.json()).then(res => {
+            let container = document.getElementById("out");
+            container.innerHTML = `
+            </br>
+            <input class="data" id="id" type="text" placeholder="Id">
+            <input class="data" id="name" type="text" placeholder="Name">
+            <input class="data" id="capacity" type="text" placeholder="Capacity">
+            <input class="data" id="type" type="text" placeholder="Type Id"></br>
+            <button onclick="post()">post</button>
+            <button onclick="put()">put</button>
+            </br></br></br>`;
+            res.forEach(auditorium => {
+                container.innerHTML += `<span>${auditorium.AUDITORIUM} - ${auditorium.AUDITORIUM_NAME} - ${auditorium.AUDITORIUM_CAPACITY} - ${auditorium.AUDITORIUM_TYPE}</span>`;
+                container.innerHTML += `<button onclick="del(this)" id="${auditorium.AUDITORIUM}">delete</button><br>`;
+            });
+        });
+    }
+
+    function auditoriumstypes() {
+        table = "auditoriumstypes";
+        fetch(url + "auditoriumstypes").then(res => res.json()).then(res => {
+            let container = document.getElementById("out");
+            container.innerHTML = `
+            </br>
+            <input class="data" id="id" type="text" placeholder="Id">
+            <input class="data" id="name" type="text" placeholder="Name"></br>
+            <button onclick="post()">post</button>
+            <button onclick="put()">put</button>
+            </br></br></br>`;
+            res.forEach(auditoriumstype => {
+                container.innerHTML += `<span>${auditoriumstype.AUDITORIUM_TYPE} - ${auditoriumstype.AUDITORIUM_TYPENAME}</span>`;
+                container.innerHTML += `<button onclick="del(this)" id="${auditoriumstype.AUDITORIUM_TYPE}">delete</button><br>`;
+            });
+        });
+    }
+
+    function put() {
+        putpost = "PUT";
+        let Data = Array.from(document.getElementsByClassName("data")).map(a => {
+            return {
+                field: a.getAttribute("id"),
+                value: a.value
+            };
+        });
+        let ID = Data.find(a => a.field === "id").value;
+        upsert(Data, ID);
+    }
+
+    function post() {
+        putpost = "POST";
+        let Data = Array.from(document.getElementsByClassName("data")).map(a => {
+            return {
+                field: a.getAttribute("id"),
+                value: a.value
+            };
+        });
+        let ID = Data.find(a => a.field === "id").value;
+        upsert(Data, ID);
+    }
+
+    function upsert(Data, ID) {
+        let data;
+        switch (table) {
+            case "pulpits":
+                data = {
+                    PULPIT: Data.find(a => a.field === "id").value,
+                    PULPIT_NAME: Data.find(a => a.field === "name").value,
+                    FACULTY: Data.find(a => a.field === "faculty").value
+                };
+                break;
+            case "faculties":
+                data = {
+                    FACULTY: Data.find(a => a.field === "id").value,
+                    FACULTY_NAME: Data.find(a => a.field === "name").value
+                };
+                break;
+            case "subjects":
+                data = {
+                    SUBJECT: Data.find(a => a.field === "id").value,
+                    SUBJECT_NAME: Data.find(a => a.field === "name").value,
+                    PULPIT: Data.find(a => a.field === "pulpit").value
+                };
+                break;
+            case "auditoriums":
+                data = {
+                    AUDITORIUM: Data.find(a => a.field === "id").value,
+                    AUDITORIUM_NAME: Data.find(a => a.field === "name").value,
+                    AUDITORIUM_CAPACITY: Data.find(a => a.field === "capacity").value,
+                    AUDITORIUM_TYPE: Data.find(a => a.field === "type").value
+                };
+                break;
+            case "auditoriumstypes":
+                data = {
+                    AUDITORIUM_TYPE: Data.find(a => a.field === "id").value,
+                    AUDITORIUM_TYPENAME: Data.find(a => a.field === "name").value
+                };
+                break;
+        }
+        fetch(url + table, {
+                method: putpost,
+                headers: {
+                    "Content-Type": "json/aplication"
+                },
+                body: JSON.stringify(data)
+            }).then(res => res.json()).then(res => {
+                checkErrors(res);
+                update();
+            })
+            .catch(res => {
+                alert(res);
+            });
+
+    }
+
+    function del(data) {
+        fetch(`${url}${table}/${data.getAttribute("id")}`, {
+                method: "DELETE"
+            }).then(res => res.json()).then(res => {
+                checkErrors(res);
+                update();
+            })
+            .catch(res => {
+                alert(res);
+            });
+    }
+
+    function checkErrors(data) {
+        if (typeof data === "string") {
+            if (data.indexOf("error") !== -1) {
+                alert(data);
+            }
+        }
+    }
+
+    function update() {
+        switch (table) {
+            case "pulpits":
+                pulpits();
+                break;
+            case "faculties":
+                faculties();
+                break;
+            case "subjects":
+                subjects();
+                break;
+            case "auditoriums":
+                auditoriums();
+                break;
+            case "auditoriumstypes":
+                auditoriumstypes();
+                break;
+        }
+    }
+</script>
+
+</html>
